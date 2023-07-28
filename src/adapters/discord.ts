@@ -1,6 +1,6 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 import Bot from './bot';
-
+import chalk from 'chalk';
 
 // discord.login(process.env.DISCORD_TOKEN);
 
@@ -31,9 +31,9 @@ class DiscordBot extends Bot {
   }
   async start() {
     await this.app.login(process.env.DISCORD_TOKEN);
-    console.log("⚡️ Discord app is running!");
+    console.log(chalk.blue("⚡️ Discord app started"));
     this.app.once(Events.ClientReady, async (c) => {
-      console.log(`Logged in as ${c.user.tag}`);
+      console.log(chalk.blue(`Ready! Logged in as ${c.user.tag}`));
     });
   }
 }

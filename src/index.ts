@@ -20,5 +20,8 @@ switch(adapter) {
 
 if (bot){
   bot.start();
+  bot.onMessage((message) => {
+    console.log(message);
+  });
 }
 
