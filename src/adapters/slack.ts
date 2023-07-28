@@ -1,22 +1,35 @@
 import { App, LogLevel } from "@slack/bolt";
-import dotenv from "dotenv";
-dotenv.config();
-
+import Bot from './bot';
 // Initialize the Bolt app with the token and signing secret
-const app = new App({
-  socketMode: true, // Enable the socket mode
-  token: process.env.SLACK_BOT_TOKEN,
-  appToken: process.env.SLACK_APP_TOKEN,
-  logLevel: LogLevel.DEBUG,
-});
 
 // Listens to incoming messages that contain "hello"
-app.message("hello", async ({ message, say }) => {
-  console.log(message);
-  await say(`Hey there!`);
-});
-// Starts the app
-(async () => {
-  await app.start();
-  console.log("⚡️ Bolt app is running!");
-})();
+// app.message("hello", async ({ message, say }) => {
+//   console.log(message);
+//   await say(`Hey there!`);
+// });
+
+class SlackBot extends Bot {
+  app: App;
+  constructor(){
+    super();
+    this.app = new App({
+      socketMode: true, // Enable the socket mode
+      token: process.env.SLACK_BOT_TOKEN,
+      appToken: process.env.SLACK_APP_TOKEN,
+      logLevel: LogLevel.DEBUG,
+    });
+  }
+
+  async sendMessage(channel: any, text: string) {
+    console.log(channel, text);
+  }
+  async onMessage(_callback: (message: any) => void) {
+   
+  }
+  async start() {
+    await this.app.start();
+    console.log("⚡️ Slack app is running!");
+  }
+}
+
+export default SlackBot;
