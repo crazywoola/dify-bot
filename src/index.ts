@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import SlackBot from "./adapters/slack";
 import DiscordBot from "./adapters/discord";
+import chalk from "chalk";
 dotenv.config();
 
 const adapter = process.env.ADAPTER || "slack";
@@ -14,7 +15,7 @@ switch(adapter) {
     bot = new DiscordBot();
     break;
   default:
-    console.log("No adapter found");
+    console.log(chalk.red("Invalid adapter"));
     break;
 }
 
