@@ -20,8 +20,11 @@ class DiscordBot extends Bot {
   async say(message: string) {}
 
   async hear(callback: (message: any) => void) {
-    
+    this.app.on(Events.MessageCreate, async (message) => {
+      callback(message);
+    })
   }
+  
   async up() {
     await this.app.login(process.env.DISCORD_TOKEN);
     console.log(chalk.blue("⚡️ Discord app started"));

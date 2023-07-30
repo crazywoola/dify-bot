@@ -22,9 +22,9 @@ class SlackBot extends Bot {
     });
   }
   async say(message: string) {}
-  
+
   async hear(callback: (message: any) => void) {
-    this.app.message("hello", async ({ message }) => {
+    this.app.message(async ({ message }) => {
       callback(message);
     });
   }
