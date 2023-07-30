@@ -17,13 +17,12 @@ class DiscordBot extends Bot {
     });
   }
 
-  async sendMessage(channel: any, text: string) {
-    console.log(channel, text);
-  }
-  async onMessage(_callback: (message: any) => void) {
+  async say(message: string) {}
+
+  async hear(callback: (message: any) => void) {
     
   }
-  async start() {
+  async up() {
     await this.app.login(process.env.DISCORD_TOKEN);
     console.log(chalk.blue("⚡️ Discord app started"));
     this.app.once(Events.ClientReady, async (c) => {

@@ -1,6 +1,6 @@
 abstract class Bot {
-  abstract sendMessage(channel: any, text: string): Promise<void>;
-  abstract onMessage(callback: (message: any) => void): void;
-  abstract start(): Promise<void>;
+  abstract say(message: string): Promise<void>;
+  abstract hear(callback: (message: any) => void): void;
+  abstract up(): Promise<void>;
 }
 export default Bot;

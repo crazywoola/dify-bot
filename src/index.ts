@@ -20,8 +20,8 @@ switch(adapter) {
 }
 
 if (bot){
-  bot.start();
-  bot.onMessage((message) => {
+  bot.up();
+  bot.hear((message) => {
     console.log(message);
   });
 }

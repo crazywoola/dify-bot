@@ -21,16 +21,14 @@ class SlackBot extends Bot {
       logLevel: LogLevel.DEBUG,
     });
   }
-
-  async sendMessage(channel: any, text: string) {
-    console.log(channel, text);
-  }
-  async onMessage(callback: (message: any) => void) {
+  async say(message: string) {}
+  
+  async hear(callback: (message: any) => void) {
     this.app.message("hello", async ({ message }) => {
       callback(message);
     });
   }
-  async start() {
+  async up() {
     await this.app.start();
     console.log(chalk.blue("⚡️ Slack app started"));
   }
