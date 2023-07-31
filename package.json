@@ -22,7 +22,6 @@
     "@types/yargs": "^17.0.24",
     "chalk": "^4.1.2",
     "commander": "^11.0.0",
-    "dify-client": "^2.0.0",
     "discord.js": "^14.11.0",
     "dotenv": "^16.3.1",
     "yargs": "^17.7.2"

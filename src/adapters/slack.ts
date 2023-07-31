@@ -14,6 +14,7 @@ class SlackBot extends Bot {
   app: App;
   constructor(){
     super();
+
     this.app = new App({
       socketMode: true, // Enable the socket mode
       token: process.env.SLACK_BOT_TOKEN,
@@ -21,6 +22,7 @@ class SlackBot extends Bot {
       logLevel: LogLevel.DEBUG,
     });
   }
+  
   async say(message: string) {}
 
   async hear(callback: (message: any) => void) {
