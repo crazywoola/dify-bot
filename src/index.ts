@@ -1,11 +1,16 @@
 import dotenv from "dotenv";
 import SlackBot from "./adapters/slack";
 import DiscordBot from "./adapters/discord";
-import { ChatClient } from 'dify-client';
+import DifyClient from "./service";
 import chalk from "chalk";
 dotenv.config();
 
-const chatClient = new ChatClient(process.env.DIFY_API_KEY);
+if (!process.env.DIFY_API_KEY) {
+  console.log(chalk.red("DIFY_API_KEY is required"));
+  process.exit(1);
+}
+
+const difyClient = new DifyClient(process.env.DIFY_API_KEY);
 const adapter = process.env.ADAPTER || "slack";
 
 let bot;
@@ -22,7 +27,7 @@ switch(adapter) {
 }
 
 if (bot){
-  bot.setChatClient(chatClient);
+  bot.setDifyClient(difyClient);
   bot.up();
   bot.hear((message) => {
     console.log(message);

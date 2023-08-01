@@ -1,7 +1,7 @@
 abstract class Bot {
   chatClient: any; // Replace 'any' with the actual type of your chat client
 
-  setChatClient(client: any) { // Replace 'any' with the actual type of your chat client
+  setDifyClient(client: any) { // Replace 'any' with the actual type of your chat client
     this.chatClient = client;
   }
   
