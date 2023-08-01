@@ -35,7 +35,10 @@ adapterConfig.requiredEnvVariables.forEach((variable: string) =>
 const bot = adapterConfig.createInstance();
 bot.setDifyClient(difyClient);
   
-bot.up();
-bot.hear((message: any) => {
-  console.log(message);
+difyClient.getApplication().then((res) => {
+  console.log(res.data);
 });
+// bot.up();
+// bot.hear((message: any) => {
+//   console.log(message);
+// });
