@@ -1,8 +1,14 @@
+import DifyClient from "../service";
 abstract class Bot {
-  chatClient: any; // Replace 'any' with the actual type of your chat client
+  difyClient: DifyClient | undefined; 
 
-  setDifyClient(client: any) { // Replace 'any' with the actual type of your chat client
-    this.chatClient = client;
+  setDifyClient(client: DifyClient) { // Replace 'any' with the actual type of your chat client
+    this.difyClient = client;
+  }
+
+  async getApplication() {
+    const result = await this.difyClient?.getApplication();
+    console.log(result);
   }
   
   abstract say(message: string): Promise<void>;

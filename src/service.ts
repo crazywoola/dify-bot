@@ -1,10 +1,10 @@
-import axios from "axios";
 export const BASE_URL = "https://api.dify.ai/v1/";
 
 export enum RequestMode {
   STREAM = "stream",
   JSON = "json",
 }
+
 export enum ResponseMode {
   STREAMING = "streaming",
   BLOCKING = "blocking",
@@ -31,45 +31,41 @@ class DifyClient {
     method: string,
     url: string,
     data: any = {},
-    params: any = {},
     response_mode: ResponseMode = ResponseMode.BLOCKING
   ) {
     const headers = {
       Authorization: `Bearer ${this.apiKey}`,
       "Content-Type": "application/json",
     };
-    let response;
-    if (response_mode === ResponseMode.STREAMING) {
-      response = axios({
-        method,
-        url: `${BASE_URL}${url}`,
-        headers,
-        data,
-        params,
-        responseType: RequestMode.STREAM,
-      });
-    } else {
-      response = axios({
-        method,
-        url: `${BASE_URL}${url}`,
-        headers,
-        data,
-        params,
-        responseType: RequestMode.JSON,
-      });
+
+    const requestOptions: RequestInit = {
+      method,
+      headers,
+    };
+
+    if (method === "POST" || method === "PATCH" || method === "PUT") {
+      requestOptions.body = JSON.stringify(data);
     }
-    
-    return response;
+
+    const response = await fetch(`${BASE_URL}${url}`, requestOptions);
+
+    if (response_mode === ResponseMode.STREAMING) {
+      const responseData = await response.text();
+      return responseData;
+    } else {
+      const responseData = await response.json();
+      return responseData;
+    }
   }
 
-  getApplication() {
+  async getApplication() {
     return this.sendRequest(
       DifyClient.routes.application.method,
-      DifyClient.routes.application.url(),
+      DifyClient.routes.application.url()
     );
   }
 
-  createChatMessage(
+  async createChatMessage(
     inputs: any,
     query: string,
     user: string,
