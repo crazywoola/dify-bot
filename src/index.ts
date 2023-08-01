@@ -5,32 +5,46 @@ import DifyClient from "./service";
 import chalk from "chalk";
 dotenv.config();
 
-if (!process.env.DIFY_API_KEY) {
-  console.log(chalk.red("DIFY_API_KEY is required"));
+// Function to check if the required environment variables are set
+function checkEnvVariable(variableName: string): string {
+  const value = process.env[variableName];
+  if (!value) {
+    console.log(chalk.red(`${variableName} is required`));
+    process.exit(1);
+  }
+  return value;
+}
+
+const ADAPTER = checkEnvVariable("ADAPTER");
+const DIFY_API_KEY = checkEnvVariable("DIFY_API_KEY");
+
+const difyClient = new DifyClient(DIFY_API_KEY);
+
+const adapters: Record<string, any> = {
+  slack: {
+    requiredEnvVariables: ["SLACK_BOT_TOKEN", "SLACK_APP_TOKEN"],
+    createInstance: () => new SlackBot(),
+  },
+  discord: {
+    requiredEnvVariables: ["DISCORD_BOT_TOKEN", "DISCORD_ID"],
+    createInstance: () => new DiscordBot(),
+  },
+};
+
+const adapterConfig = adapters[ADAPTER];
+
+if (!adapterConfig) {
+  console.log(chalk.red("Invalid adapter"));
   process.exit(1);
 }
 
-const difyClient = new DifyClient(process.env.DIFY_API_KEY);
-const adapter = process.env.ADAPTER || "slack";
+adapterConfig.requiredEnvVariables.forEach((variable: string) =>
+  checkEnvVariable(variable)
+);
 
-let bot;
-switch(adapter) {
-  case "slack":
-    bot = new SlackBot();
-    break;
-  case "discord":
-    bot = new DiscordBot();
-    break;
-  default:
-    console.log(chalk.red("Invalid adapter"));
-    break;
-}
-
-if (bot){
-  bot.setDifyClient(difyClient);
-  bot.up();
-  bot.hear((message) => {
-    console.log(message);
-  });
-}
-
+const bot = adapterConfig.createInstance();
+bot.setDifyClient(difyClient);
+bot.up();
+bot.hear((message: any) => {
+  console.log(message);
+});
