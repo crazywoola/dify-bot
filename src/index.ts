@@ -6,6 +6,10 @@ import { checkEnvVariable } from "./util";
 import chalk from "chalk";
 dotenv.config();
 
+// TODO Check MODE
+// If MODE is chat, then run the bot
+// If MODE is completion, then run the bot & register the commands
+// const MODE = checkEnvVariable("MODE");
 const ADAPTER = checkEnvVariable("ADAPTER");
 const DIFY_API_KEY = checkEnvVariable("DIFY_API_KEY");
 const difyClient = new DifyClient(DIFY_API_KEY);
@@ -35,10 +39,6 @@ adapterConfig.requiredEnvVariables.forEach((variable: string) =>
 const bot = adapterConfig.createInstance();
 bot.setDifyClient(difyClient);
   
-difyClient.getApplication().then((res) => {
-  console.log(res.data);
-});
+bot.getApplication();
+
 // bot.up();
-// bot.hear((message: any) => {
-//   console.log(message);
-// });

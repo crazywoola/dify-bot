@@ -8,3 +8,9 @@ export function checkEnvVariable(variableName: string): string {
   }
   return value;
 }
+// Function to parse json in streaming mode
+// "data: {}"
+export function parseJsonInStreamingMode(data: string): any {
+  const json = JSON.parse(data);
+  return json;
+}

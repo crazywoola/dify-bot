@@ -1,14 +1,16 @@
 import DifyClient from "../service";
+import { TextInput, Select } from "../types";
 abstract class Bot {
   difyClient: DifyClient | undefined; 
-
-  setDifyClient(client: DifyClient) { // Replace 'any' with the actual type of your chat client
+  application?: [TextInput | Select];
+  
+  setDifyClient(client: DifyClient) {
     this.difyClient = client;
   }
 
   async getApplication() {
     const result = await this.difyClient?.getApplication();
-    console.log(result);
+    this.application = result?.data.user_input_form;
   }
   
   abstract say(message: string): Promise<void>;
