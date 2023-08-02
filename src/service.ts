@@ -17,6 +17,10 @@ class DifyClient {
       method: "GET",
       url: () => `/parameters`,
     },
+    createCompletionMessage: {
+      method: "POST",
+      url: () => `/completion-messages`,
+    },
     createChatMessage: {
       method: "POST",
       url: () => `/chat-messages`,
@@ -86,6 +90,26 @@ class DifyClient {
     return this.sendRequest(
       DifyClient.routes.createChatMessage.method,
       DifyClient.routes.createChatMessage.url(),
+      data,
+      response_mode
+    );
+  }
+
+  createCompletionMessage(
+    inputs: any,
+    query: string,
+    user: string,
+    response_mode: ResponseMode = ResponseMode.STREAMING
+  ) {
+    const data = {
+      inputs,
+      query,
+      user,
+      response_mode,
+    };
+    return this.sendRequest(
+      DifyClient.routes.createCompletionMessage.method,
+      DifyClient.routes.createCompletionMessage.url(),
       data,
       response_mode
     );
