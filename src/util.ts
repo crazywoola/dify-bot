@@ -8,9 +8,14 @@ export function checkEnvVariable(variableName: string): string {
   }
   return value;
 }
-// Function to parse json in streaming mode
-// "data: {}"
-export function parseJsonInStreamingMode(data: string): any {
-  const json = JSON.parse(data);
-  return json;
+// Function to parse string in streaming mode
+// 'data: {"event": "message", "task_id": "e22d1147-6fd9-4a01-8340-87c66a66aec2", "id": "8cf8f6f8-4ec2-42ca-bc1d-71c3ebc0a18e", "answer": " applications", "created_at": 1690977033, "conversation_id": "afa95cc9-d7b2-4f2b-aea8-fdd4ee299866"}'
+export function streamParser(data: string): any {
+  try {
+    const json = data.split("data: ")[1];
+    return JSON.parse(json).answer;
+  } catch (error) {
+    console.log(chalk.red(error));
+    return "😄"
+  }
 }

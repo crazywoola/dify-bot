@@ -38,6 +38,7 @@ class DifyClient {
     params: any = {},
     response_mode: ResponseMode = ResponseMode.BLOCKING
   ) {
+    console.log(response_mode)
     const headers = {
       Authorization: `Bearer ${this.apiKey}`,
       "Content-Type": "application/json",
@@ -91,6 +92,7 @@ class DifyClient {
       DifyClient.routes.createChatMessage.method,
       DifyClient.routes.createChatMessage.url(),
       data,
+      {},
       response_mode
     );
   }
@@ -111,6 +113,7 @@ class DifyClient {
       DifyClient.routes.createCompletionMessage.method,
       DifyClient.routes.createCompletionMessage.url(),
       data,
+      {},
       response_mode
     );
   }

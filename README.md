@@ -19,3 +19,12 @@ on
 messages.channels
 messages.groups
 ```
+
+```
+bot.send({ 
+  'name': 'John', 
+  'Edition': 'Cloud version' }, 
+  "Who is the founder dify", 
+  "1234"
+);
+```

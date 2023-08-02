@@ -17,11 +17,11 @@ class DiscordBot extends Bot {
     });
   }
 
-  async say(message: string) {}
+  async say() {}
 
-  async hear(callback: (message: any) => void) {
+  async hear() {
     this.app.on(Events.MessageCreate, async (message) => {
-      callback(message);
+
     })
   }
   
