@@ -9,7 +9,6 @@ import Bot from './bot';
 //   console.log(message);
 //   await say(`Hey there!`);
 // });
-
 class SlackBot extends Bot {
   app: App;
   constructor() {
@@ -25,40 +24,49 @@ class SlackBot extends Bot {
 
   async say() { }
 
-  async hear() {
-    // subscribe to 'app_mention' event in your App config
-    // need app_mentions:read and chat:write scopes
-    this.app.event("app_mention", async ({ event, client, say }) => {
-      const inputs = {};
-      const query = event.text;
-      const user = event.user || '';
-      // Send an initial message
-      const response = await say(`Hello, <@${event.user}>! Processing your request...`);
-
-      if (response.channel && response.ts) {
-        const channel: string = response.channel;
-        const ts: string = response.ts;
-
-        // ... do some async operation ...
-        this.send(
-          inputs,
-          query,
-          user,
-          async (msg) => {
-            await client.chat.update({
-              channel: channel,
-              ts: ts,
-              text: msg,
-            });
-          }
-        )
-        // Update the message
-        
-      } else {
-        console.error('Failed to send message');
-      }
-    });
+  handleHello = async ({ message, say }: { message: any, say: any }) => {
+    console.log(message);
+    await say(`Hey there!`);
   }
+
+  handleAppMention = async ({ event, client }: { event: any, client: any }) => {
+    const inputs = {};
+    const query = event.text;
+    const user = event.user || '';
+    // Send an initial message and open a thread
+    const response = await client.chat.postMessage({
+      channel: event.channel,
+      thread_ts: event.ts,
+      text: `<@${user}>! ...`,
+    });
+
+    if (response.channel && response.ts) {
+      const channel: string = response.channel;
+      const ts: string = response.ts;
+
+      this.send(
+        inputs,
+        query,
+        user,
+        async (msg) => {
+          await client.chat.update({
+            channel: channel,
+            ts: ts,
+            text: msg,
+          });
+        }
+      )
+
+    } else {
+      console.error(chalk.red("Failed to send message"));
+    }
+  }
+
+  async hear() {
+    this.app.message("hello", this.handleHello);
+    this.app.event("app_mention", this.handleAppMention);
+  }
+
   async up() {
     await this.app.start();
     console.log(chalk.blue("⚡️ Slack app started"));
