@@ -1,11 +1,9 @@
 import chalk from "chalk";
 import DifyClient from "../service";
-import { TextInput, Select } from "../types";
+import { TextInput, Select, DifyStreamResponse } from "../types";
 import { streamParser } from "../util";
 
-type DifyStreamResponse = {
-  data: NodeJS.ReadableStream;
-};
+
 abstract class Bot {
   difyClient?: DifyClient;
   application?: [TextInput | Select];

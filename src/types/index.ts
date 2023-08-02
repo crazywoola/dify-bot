@@ -13,3 +13,7 @@ export type Select = {
   options: string[];
   default: string;
 }
+
+export type DifyStreamResponse = {
+  data: NodeJS.ReadableStream;
+};
