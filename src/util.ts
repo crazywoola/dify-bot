@@ -1,9 +1,10 @@
 import chalk from "chalk";
+
 // Function to check if the required environment variables are set
 export function checkEnvVariable(variableName: string): string {
   const value = process.env[variableName];
   if (!value) {
-    console.log(chalk.red(`${variableName} is required`));
+    error(`Please set ${variableName} environment variable`);
     process.exit(1);
   }
   return value;
@@ -14,8 +15,12 @@ export function streamParser(data: string): any {
   try {
     const json = data.split("data: ")[1];
     return JSON.parse(json).answer;
-  } catch (error) {
-    console.log(chalk.red(error));
+  } catch (e) {
+    error(`Error while parsing data: ${data}, error: ${e}`);
     return "😄"
   }
+}
+
+export function error(message: string) {
+  console.log(chalk.red(message));
 }

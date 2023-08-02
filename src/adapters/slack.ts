@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import { App, LogLevel } from "@slack/bolt";
 import Bot from './bot';
+import { error } from "../util";
 
 // Initialize the Bolt app with the token and signing secret
 
@@ -18,7 +19,7 @@ class SlackBot extends Bot {
       socketMode: true, // Enable the socket mode
       token: process.env.SLACK_BOT_TOKEN,
       appToken: process.env.SLACK_APP_TOKEN,
-      // logLevel: LogLevel.DEBUG,
+      logLevel: LogLevel.DEBUG,
     });
   }
 
@@ -58,7 +59,7 @@ class SlackBot extends Bot {
       )
 
     } else {
-      console.error(chalk.red("Failed to send message"));
+      error('Error while sending message');
     }
   }
 

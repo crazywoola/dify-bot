@@ -2,8 +2,7 @@ import dotenv from "dotenv";
 import SlackBot from "./adapters/slack";
 import DiscordBot from "./adapters/discord";
 import DifyClient from "./service";
-import { checkEnvVariable } from "./util";
-import chalk from "chalk";
+import { checkEnvVariable, error } from "./util";
 dotenv.config();
 
 // TODO Check MODE
@@ -28,7 +27,7 @@ const adapters: Record<string, any> = {
 const adapterConfig = adapters[ADAPTER];
 
 if (!adapterConfig) {
-  console.log(chalk.red("Invalid adapter"));
+  error('Invalid adapter. Please use "slack" or "discord"');
   process.exit(1);
 }
 

@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import DifyClient from "../service";
 import { TextInput, Select, DifyStreamResponse } from "../types";
-import { streamParser } from "../util";
+import { streamParser, error } from "../util";
 
 
 abstract class Bot {
@@ -33,8 +33,8 @@ abstract class Bot {
         console.log(chalk.green(`RESULT: ${result}`));
         callback(result);
       });
-    } catch (error) {
-      console.log(chalk.red(error));
+    } catch {
+      error('Error while sending message');
     }
   }
   abstract say(message: string): Promise<void>;
