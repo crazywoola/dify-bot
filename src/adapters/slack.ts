@@ -5,14 +5,6 @@ import {
 } from "@slack/bolt";
 import Bot from './bot';
 import { error } from "../util";
-
-// Initialize the Bolt app with the token and signing secret
-
-// Listens to incoming messages that contain "hello"
-// app.message("hello", async ({ message, say }) => {
-//   console.log(message);
-//   await say(`Hey there!`);
-// });
 class SlackBot extends Bot {
   app: App;
   constructor() {

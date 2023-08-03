@@ -18,10 +18,21 @@ export function streamParser(data: string): any {
     return JSON.parse(json).answer;
   } catch (e) {
     error(`Error while parsing data: ${data}, error: ${e}`);
-    return "😄"
+    return "😄";
   }
 }
 
 export function error(message: string) {
   console.log(chalk.red(message));
+}
+
+export function info(message: string) {
+  console.log(chalk.blue(message));
+}
+export function success(message: string) {
+  console.log(chalk.green(message));
+}
+
+export function warn(message: string) {
+  console.log(chalk.yellow(message));
 }
