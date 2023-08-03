@@ -1,30 +1,30 @@
-import axios from "axios";
-export const BASE_URL = "https://api.dify.ai/v1";
+import axios from 'axios';
+export const BASE_URL = 'https://api.dify.ai/v1';
 
 export enum RequestMode {
-  STREAM = "stream",
-  JSON = "json",
+  STREAM = 'stream',
+  JSON = 'json'
 }
 export enum ResponseMode {
-  STREAMING = "streaming",
-  BLOCKING = "blocking",
+  STREAMING = 'streaming',
+  BLOCKING = 'blocking'
 }
 
 class DifyClient {
   private apiKey: string;
   static routes = {
     application: {
-      method: "GET",
-      url: () => `/parameters`,
+      method: 'GET',
+      url: () => `/parameters`
     },
     createCompletionMessage: {
-      method: "POST",
-      url: () => `/completion-messages`,
+      method: 'POST',
+      url: () => `/completion-messages`
     },
     createChatMessage: {
-      method: "POST",
-      url: () => `/chat-messages`,
-    },
+      method: 'POST',
+      url: () => `/chat-messages`
+    }
   };
 
   constructor(apiKey: string) {
@@ -40,7 +40,7 @@ class DifyClient {
   ) {
     const headers = {
       Authorization: `Bearer ${this.apiKey}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     };
     let response;
     if (response_mode === ResponseMode.STREAMING) {
@@ -50,7 +50,7 @@ class DifyClient {
         headers,
         data,
         params,
-        responseType: RequestMode.STREAM,
+        responseType: RequestMode.STREAM
       });
     } else {
       response = axios({
@@ -59,17 +59,17 @@ class DifyClient {
         headers,
         data,
         params,
-        responseType: RequestMode.JSON,
+        responseType: RequestMode.JSON
       });
     }
-    
+
     return response;
   }
 
   getApplication() {
     return this.sendRequest(
       DifyClient.routes.application.method,
-      DifyClient.routes.application.url(),
+      DifyClient.routes.application.url()
     );
   }
 
@@ -85,7 +85,7 @@ class DifyClient {
       query,
       user,
       response_mode,
-      conversation_id,
+      conversation_id
     };
     return this.sendRequest(
       DifyClient.routes.createChatMessage.method,
@@ -106,7 +106,7 @@ class DifyClient {
       inputs,
       query,
       user,
-      response_mode,
+      response_mode
     };
     return this.sendRequest(
       DifyClient.routes.createCompletionMessage.method,

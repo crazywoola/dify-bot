@@ -4,7 +4,7 @@ export type TextInput = {
   required: boolean;
   max_length: number;
   default: string;
-}
+};
 
 export type Select = {
   label: string;
@@ -12,7 +12,7 @@ export type Select = {
   required: boolean;
   options: string[];
   default: string;
-}
+};
 
 export type DifyStreamResponse = {
   data: NodeJS.ReadableStream;

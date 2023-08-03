@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import chalk from 'chalk';
 
 // Function to check if the required environment variables are set
 export function checkEnvVariable(variableName: string): string {
@@ -14,11 +14,11 @@ export function checkEnvVariable(variableName: string): string {
 // TODO Error while parsing data: event: ping
 export function streamParser(data: string): any {
   try {
-    const json = data.split("data: ")[1];
+    const json = data.split('data: ')[1];
     return JSON.parse(json).answer;
   } catch (e) {
     error(`Error while parsing data: ${data}, error: ${e}`);
-    return "😄";
+    return '😄';
   }
 }
 
