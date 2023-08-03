@@ -7,6 +7,10 @@ abstract class Bot {
   difyClient?: DifyClient;
   application?: [TextInput | Select];
 
+  abstract say(message: string): Promise<void>;
+  abstract hear(): void;
+  abstract up(): Promise<void>;
+
   setDifyClient(client: DifyClient) {
     this.difyClient = client;
   }
@@ -44,8 +48,5 @@ abstract class Bot {
       error('Error while sending message');
     }
   }
-  abstract say(message: string): Promise<void>;
-  abstract hear(): void;
-  abstract up(): Promise<void>;
 }
 export default Bot;
