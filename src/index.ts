@@ -19,7 +19,7 @@ const adapters: Record<string, any> = {
     createInstance: () => new SlackBot()
   },
   discord: {
-    requiredEnvVariables: ['DISCORD_BOT_TOKEN', 'DISCORD_ID'],
+    requiredEnvVariables: ['DISCORD_TOKEN', 'DISCORD_ID'],
     createInstance: () => new DiscordBot()
   }
 };

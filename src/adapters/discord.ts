@@ -20,7 +20,14 @@ class DiscordBot extends Bot {
   async say() {}
 
   async hear() {
-    this.app.on(Events.MessageCreate, async message => {});
+    this.app.on(Events.MessageCreate, async message => {
+      const user = this.app.user;
+      if (user && message.mentions.has(user)) {
+        console.log(message.content);
+      } else {
+        console.log(`not mentioned`);
+      }
+    });
   }
 
   async up() {
