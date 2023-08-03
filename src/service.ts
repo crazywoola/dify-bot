@@ -5,6 +5,7 @@ export enum RequestMode {
   STREAM = 'stream',
   JSON = 'json'
 }
+
 export enum ResponseMode {
   STREAMING = 'streaming',
   BLOCKING = 'blocking'
