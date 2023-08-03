@@ -18,7 +18,8 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "build": "tsc",
     "dev": "nodemon --exec ts-node ./src/index.ts",
-    "start": "node ./dist/index.js"
+    "start": "node ./dist/index.js",
+    "prepare": "husky install"
   },
   "husky": {
     "hooks": {
@@ -26,7 +27,9 @@
     }
   },
   "lint-staged": {
-    "*.ts": ["prettier --write"]
+    "*.ts": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@slack/bolt": "^3.13.2",
