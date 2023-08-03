@@ -7,7 +7,10 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^14.11.2",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
     "nodemon": "^3.0.1",
+    "prettier": "^3.0.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   },
@@ -15,6 +18,14 @@
     "build": "tsc",
     "dev": "nodemon --exec ts-node ./src/index.ts",
     "start": "node ./dist/index.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": ["prettier --write"]
   },
   "dependencies": {
     "@slack/bolt": "^3.13.2",
