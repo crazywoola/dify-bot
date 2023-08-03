@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios, { AxiosResponse, Method } from 'axios';
+
 export const BASE_URL = 'https://api.dify.ai/v1';
 
 export enum RequestMode {
@@ -11,9 +12,15 @@ export enum ResponseMode {
   BLOCKING = 'blocking'
 }
 
+// Define the structure of the route
+interface Route {
+  method: Method;
+  url: () => string;
+}
+
 class DifyClient {
   private apiKey: string;
-  static routes = {
+  static routes: { [key: string]: Route } = {
     application: {
       method: 'GET',
       url: () => `/parameters`
@@ -32,55 +39,58 @@ class DifyClient {
     this.apiKey = apiKey;
   }
 
+  // This method sends a request to the specified url with the given data and parameters
   async sendRequest(
-    method: string,
+    method: Method,
     url: string,
     data: any = {},
     params: any = {},
     response_mode: ResponseMode = ResponseMode.BLOCKING
-  ) {
+  ): Promise<AxiosResponse<any>> {
     const headers = {
       Authorization: `Bearer ${this.apiKey}`,
       'Content-Type': 'application/json'
     };
-    let response;
-    if (response_mode === ResponseMode.STREAMING) {
-      response = axios({
-        method,
-        url: `${BASE_URL}${url}`,
-        headers,
-        data,
-        params,
-        responseType: RequestMode.STREAM
-      });
-    } else {
-      response = axios({
-        method,
-        url: `${BASE_URL}${url}`,
-        headers,
-        data,
-        params,
-        responseType: RequestMode.JSON
-      });
-    }
 
-    return response;
+    try {
+      const response = await axios({
+        method,
+        url: `${BASE_URL}${url}`,
+        headers,
+        data,
+        params,
+        responseType:
+          response_mode === ResponseMode.STREAMING
+            ? RequestMode.STREAM
+            : RequestMode.JSON
+      });
+
+      return response;
+    } catch (error) {
+      console.error(
+        `Error occurred while making a ${method} request to ${url}`,
+        error
+      );
+      throw error;
+    }
   }
 
-  getApplication() {
+  // This method retrieves the application data
+  getApplication(): Promise<AxiosResponse<any>> {
     return this.sendRequest(
       DifyClient.routes.application.method,
       DifyClient.routes.application.url()
     );
   }
 
+  // This method creates a chat message
   createChatMessage(
     inputs: any,
     query: string,
     user: string,
     conversation_id: string | null = null,
     response_mode: ResponseMode = ResponseMode.STREAMING
-  ) {
+  ): Promise<AxiosResponse<any>> {
     const data = {
       inputs,
       query,
@@ -97,12 +107,13 @@ class DifyClient {
     );
   }
 
+  // This method creates a completion message
   createCompletionMessage(
     inputs: any,
     query: string,
     user: string,
     response_mode: ResponseMode = ResponseMode.STREAMING
-  ) {
+  ): Promise<AxiosResponse<any>> {
     const data = {
       inputs,
       query,
