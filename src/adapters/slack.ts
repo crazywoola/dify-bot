@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { 
   App, 
-  // LogLevel 
+  LogLevel 
 } from "@slack/bolt";
 import Bot from './bot';
 import { error } from "../util";
@@ -22,7 +22,7 @@ class SlackBot extends Bot {
       socketMode: true, // Enable the socket mode
       token: process.env.SLACK_BOT_TOKEN,
       appToken: process.env.SLACK_APP_TOKEN,
-      // logLevel: LogLevel.DEBUG,
+      logLevel: process.env.DEBUG ==='debug' ? LogLevel.DEBUG : LogLevel.INFO,
     });
   }
 
@@ -37,6 +37,7 @@ class SlackBot extends Bot {
     const inputs = {};
     const query = event.text;
     const user = event.user || '';
+
     // Send an initial message and open a thread
     const response = await client.chat.postMessage({
       channel: event.channel,
@@ -45,17 +46,14 @@ class SlackBot extends Bot {
     });
 
     if (response.channel && response.ts) {
-      const channel: string = response.channel;
-      const ts: string = response.ts;
-
       this.send(
         inputs,
         query,
         user,
         async (msg) => {
           await client.chat.update({
-            channel: channel,
-            ts: ts,
+            channel:  response.channel,
+            ts:  response.ts,
             text: msg,
           });
         }
