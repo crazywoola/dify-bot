@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import { FormItem } from './types';
 // Function to check if the required environment variables are set
 export function checkEnvVariable(variableName: string): string {
   const value = process.env[variableName];
@@ -34,4 +35,21 @@ export function success(message: string) {
 
 export function warn(message: string) {
   console.log(chalk.yellow(message));
+}
+
+export function userInputFormParser(items: any[]): FormItem[] {
+  // Initialize an empty array to store the converted data
+  let convertedData = [];
+
+  // Iterate over each object in the array
+  for (let item of items) {
+    for (let key in item) {
+      // Create a new object with 'type' key and existing data
+      let newObj = { type: key, ...item[key] };
+
+      // Append the new object to the array
+      convertedData.push(newObj);
+    }
+  }
+  return convertedData;
 }

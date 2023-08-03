@@ -14,6 +14,15 @@ export type Select = {
   default: string;
 };
 
+export type FormItem = {
+  type: string;
+  label: string;
+  variable: string;
+  required: boolean;
+  max_length?: number;
+  default: string;
+  options?: string[];
+};
 export type DifyStreamResponse = {
   data: NodeJS.ReadableStream;
 };

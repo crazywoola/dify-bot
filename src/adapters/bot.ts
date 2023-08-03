@@ -1,11 +1,11 @@
 import chalk from 'chalk';
 import DifyClient from '../service';
-import { TextInput, Select, DifyStreamResponse } from '../types';
-import { streamParser, error } from '../util';
+import { FormItem, DifyStreamResponse } from '../types';
+import { userInputFormParser, streamParser, error } from '../util';
 
 abstract class Bot {
   difyClient?: DifyClient;
-  application?: [TextInput | Select];
+  application?: FormItem[];
 
   abstract say(message: string): Promise<void>;
   abstract hear(): void;
@@ -16,7 +16,8 @@ abstract class Bot {
   }
   async setApplication() {
     const result = await this.difyClient?.getApplication();
-    this.application = result?.data.user_input_form;
+    const parsed = userInputFormParser(result?.data.user_input_form || []);
+    this.application = parsed;
   }
 
   async send(
