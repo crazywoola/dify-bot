@@ -15,9 +15,13 @@ abstract class Bot {
     this.difyClient = client;
   }
   async setApplication() {
-    const result = await this.difyClient?.getApplication();
-    const parsed = userInputFormParser(result?.data.user_input_form || []);
-    this.application = parsed;
+    try {
+      const result = await this.difyClient?.getApplication();
+      const parsed = userInputFormParser(result?.data.user_input_form || []);
+      this.application = parsed;
+    } catch (error) {
+      this.application = [];
+    }
   }
 
   async send(
