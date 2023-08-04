@@ -29,7 +29,7 @@ DISCORD_ID=1112021318955708487
 
 - For Slack bot you need to create a bot user and install the app to your workspace. You need SLACK_BOT_TOKEN and SLACK_APP_TOKEN to run the bot. You can find the tokens in the [Slack API](https://api.slack.com/apps) page.
 
-- For Discord bot you need to create a bot user and get the token in the [Discord Developer Portal](https://discord.com/developers/applications). You ned DISCORD_TOKEN and DISCORD_ID to run the bot. You can find the tokens in the [Discord Developer Portal](https://discord.com/developers/applications).
+- For Discord bot you need to create a bot user and get the token in the [Discord Developer Portal](https://discord.com/developers/applications). You nded DISCORD_TOKEN and DISCORD_ID to run the bot. You can find the tokens in the [Discord Developer Portal](https://discord.com/developers/applications) as well.
 
 ## OAuth Scopes
 
