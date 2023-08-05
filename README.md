@@ -1,6 +1,6 @@
 # Dify Bot
 
-#### [Website](https://dify.ai) • [Docs](https://docs.dify.ai) •  [FAQ](https://docs.dify.ai/getting-started/faq) • [Twitter](https://twitter.com/dify_ai)
+#### [Website](https://dify.ai) • [Docs](https://docs.dify.ai) • [Twitter](https://twitter.com/dify_ai)
 ## Description
 
 A unified bot for Discord and Slack and etc. Powered by [Dify.AI](https://dify.ai/).
@@ -62,4 +62,4 @@ MIT License
 
 ## Author
 
-- [Author](https://www.xiaohongshu.com/user/profile/55b646aa3397db5ad6136b9c)
+- [小红书](https://www.xiaohongshu.com/user/profile/55b646aa3397db5ad6136b9c) 点个关注 ➕
