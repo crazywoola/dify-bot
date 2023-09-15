@@ -10,10 +10,9 @@ RUN npm ci --only=production
 
 # build resources
 FROM base as builder
-WORKDIR /app/web
-COPY --from=packages /app/web/ .
+WORKDIR /app/playground
+COPY --from=packages /app/playground/ .
 COPY . .
-
 RUN npm run build
 
 # production stage

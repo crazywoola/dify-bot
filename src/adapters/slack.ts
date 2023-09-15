@@ -31,16 +31,19 @@ class SlackBot extends Bot {
     const response = await client.chat.postMessage({
       channel: event.channel,
       thread_ts: event.ts,
-      text: `<@${user}>! ...`
+      text: `<@${user}>! Thinking...`
     });
 
     if (response.channel && response.ts) {
       this.send(inputs, query, user, async msg => {
-        await client.chat.update({
-          channel: response.channel,
-          ts: response.ts,
-          text: msg
-        });
+        console.log(msg);
+        if (msg !== null) {
+          await client.chat.update({
+            channel: response.channel,
+            ts: response.ts,
+            text: msg || ':0'
+          });
+        }
       });
     } else {
       error('Error while sending message');
