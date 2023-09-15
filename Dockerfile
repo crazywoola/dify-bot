@@ -5,8 +5,8 @@ LABEL maintainer="banana@dify.ai"
 # install deps
 WORKDIR /app/playground
 COPY package.json .
-COPY yarn.lock .
-RUN yarn --only=prod
+COPY package-lock.json .
+RUN npm ci --only=production
 
 # build resources
 FROM base as production
@@ -15,5 +15,5 @@ ENV COMMIT_SHA ${COMMIT_SHA}
 WORKDIR /app/playground
 COPY --from=packages /app/playground/ .
 COPY . .
-RUN yarn start
+RUN npm start
 

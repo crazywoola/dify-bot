@@ -19,7 +19,7 @@
     "build": "tsc",
     "dev": "nodemon --exec ts-node ./src/index.ts",
     "start": "node ./dist/index.js",
-    "prepare": "husky install && npx husky add .husky/pre-commit 'npx lint-staged'"
+    "husky": "husky install && npx husky add .husky/pre-commit 'npx lint-staged'"
   },
   "lint-staged": {
     "src/**/*.ts": [
