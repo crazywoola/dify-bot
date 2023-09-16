@@ -1,6 +1,7 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 import Bot from './bot';
 import { info, error } from '../util';
+import debounce from 'lodash/debounce';
 
 class DiscordBot extends Bot {
   app: Client;
@@ -17,26 +18,31 @@ class DiscordBot extends Bot {
     });
   }
 
+  debouncedEditUpdate = debounce(async (message, newText) => {
+    await message.edit(newText);
+  }, 100);
+
   handleAppMention = async (message: any) => {
     const inputs = {};
     const query = message.content;
     const user = message.author.username;
-    console.log(query, user);
-    // Send an initial message and open a thread
-    const ref = await message.reply(':) ...');
-    try {
-      this.send(inputs, query, user, async msg => {
-        await ref.edit(msg);
-      });
-    } catch {
-      error('Error while sending message');
-    }
+
+    const initialMessage = await message.reply('<@' + user + '> Thinking...');
+
+    this.send(inputs, query, user, async (msg, err) => {
+      if (err) {
+        await initialMessage.edit('Error while sending message to dify.ai');
+      } else {
+        this.debouncedEditUpdate(initialMessage, msg || 'Unknown response');
+      }
+    });
   };
+
   async say() {}
 
   async hear() {
     this.app.on(Events.MessageCreate, async message => {
-      // return if this is a bot user
+      // Return if the author of the message is a bot
       if (message.author.bot) return;
       const user = this.app.user;
       if (user && message.mentions.has(user)) {
