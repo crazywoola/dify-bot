@@ -49,7 +49,7 @@ npm install
 npm run build
 npm run start
 ```
-
+docker build . -t pinkbanana/bot:latest
 ## Development
 
 ```bash
