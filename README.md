@@ -56,6 +56,13 @@ npm run start
 npm run dev
 ```
 
+## Production
+
+```
+docker build . -t pinkbanana/bot:latest
+docker run -it --env-file .env pinkbanana/bot:latest
+```
+
 ## License
 
 MIT License
