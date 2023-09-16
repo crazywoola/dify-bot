@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  bot:
+    image: pinkbanana/bot:latest
+    env_file:
+      - ./.env
