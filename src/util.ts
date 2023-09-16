@@ -12,27 +12,21 @@ export function checkEnvVariable(variableName: string): string {
 // Function to parse string in streaming mode
 // 'data: {"event": "message", "task_id": "e22d1147-6fd9-4a01-8340-87c66a66aec2", "id": "8cf8f6f8-4ec2-42ca-bc1d-71c3ebc0a18e", "answer": " applications", "created_at": 1690977033, "conversation_id": "afa95cc9-d7b2-4f2b-aea8-fdd4ee299866"}'
 // TODO Error while parsing data: event: ping
-let buffer = '';
+let buffer = ''; // assuming buffer is defined somewhere outside the function
 
 export function streamParser(data: string): any {
   buffer += data;
 
-  // Split buffered data by the "data: " prefix
-  const messages = buffer.split('data: ');
-
-  // If there's only one incomplete message, return early
-  if (messages.length <= 1) return '';
-
+  // Split buffered data by double newline, which is the separator for SSE events
+  const messages = buffer.split('\n\n');
   // Keep the last part in buffer for the next chunk
   buffer = messages.pop() || '';
 
-  // Parse each message
   for (const message of messages) {
-    if (message) {
+    if (message.startsWith('data: ')) {
       try {
-        const json = JSON.parse(message);
+        const json = JSON.parse(message.slice(6).trim()); // slice off the "data: " prefix
         if (json.event === 'ping') continue;
-
         if (json.event === 'message') {
           console.log(json);
           return json['answer'];

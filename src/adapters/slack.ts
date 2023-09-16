@@ -1,9 +1,12 @@
 import chalk from 'chalk';
+import debounce from 'lodash/debounce';
 import { App, LogLevel } from '@slack/bolt';
 import Bot from './bot';
 import { error } from '../util';
+
 class SlackBot extends Bot {
   app: App;
+
   constructor() {
     super();
 
@@ -22,12 +25,19 @@ class SlackBot extends Bot {
     await say(`Hey there!`);
   };
 
+  debouncedChatUpdate = debounce(async (client, channel, ts, text) => {
+    await client.chat.update({
+      channel: channel,
+      ts: ts,
+      text: text
+    });
+  }, 300);
+
   handleAppMention = async ({ event, client }: { event: any; client: any }) => {
     const inputs = {};
     const query = event.text;
     const user = event.user || '';
 
-    // Send an initial message and open a thread
     const response = await client.chat.postMessage({
       channel: event.channel,
       thread_ts: event.ts,
@@ -44,11 +54,12 @@ class SlackBot extends Bot {
               text: 'Error while sending message to dify.ai'
             });
           } else {
-            await client.chat.update({
-              channel: response.channel,
-              ts: response.ts,
-              text: msg
-            });
+            this.debouncedChatUpdate(
+              client,
+              response.channel,
+              response.ts,
+              msg || 'Unknown response'
+            );
           }
         });
       }
