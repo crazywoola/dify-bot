@@ -27,7 +27,7 @@ class DiscordBot extends Bot {
     const query = message.content;
     const user = message.author.username;
 
-    const initialMessage = await message.reply('<@' + user + '> Thinking...');
+    const initialMessage = await message.reply('Thinking...');
 
     this.send(inputs, query, user, async (msg, err) => {
       if (err) {
