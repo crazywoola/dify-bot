@@ -30,22 +30,25 @@ abstract class Bot {
     user: string,
     callback: (msg: string, error: boolean) => void
   ) {
-    let res: DifyStreamResponse;
     try {
-      res = (await this.difyClient?.createChatMessage(
+      const res: DifyStreamResponse = (await this.difyClient?.createChatMessage(
         inputs,
         query,
         user
       )) as DifyStreamResponse;
+
+      if (!res || !res.data) {
+        throw new Error('Invalid stream response');
+      }
+
       const stream = res.data;
       let result = '';
-      stream.on('data', (chunk: Buffer) => {
-        const word = streamParser(chunk.toString());
-        result += word;
-        callback(result, false);
-      });
 
-      stream.on('error', () => {
+      stream.setEncoding('utf8');
+
+      stream.on('data', (chunk: string) => {
+        const word = streamParser(chunk);
+        result += word;
         callback(result, false);
       });
 
@@ -53,9 +56,9 @@ abstract class Bot {
         console.log(chalk.green(`RESULT: ${result}`));
         callback(result, false);
       });
-    } catch {
-      error('Error while sending message to dify.ai');
-      callback('Error while sending message to dify.ai', true);
+    } catch (e) {
+      error(`Error while sending message to dify.ai ${e}`);
+      callback('', true);
     }
   }
 }

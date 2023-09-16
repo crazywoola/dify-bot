@@ -41,15 +41,15 @@ class SlackBot extends Bot {
             await client.chat.update({
               channel: response.channel,
               ts: response.ts,
+              text: 'Error while sending message to dify.ai'
+            });
+          } else {
+            await client.chat.update({
+              channel: response.channel,
+              ts: response.ts,
               text: msg
             });
-            return;
           }
-          await client.chat.update({
-            channel: response.channel,
-            ts: response.ts,
-            text: msg
-          });
         });
       }
     } catch (e) {
