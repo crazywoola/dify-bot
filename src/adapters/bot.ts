@@ -41,7 +41,6 @@ abstract class Bot {
       let result = '';
       stream.on('data', (chunk: Buffer) => {
         const word = streamParser(chunk.toString());
-        console.log(chalk.blue(`RESULT: ${word}`));
         result += word;
         callback(result);
       });

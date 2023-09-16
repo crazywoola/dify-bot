@@ -41,7 +41,7 @@ class SlackBot extends Bot {
           await client.chat.update({
             channel: response.channel,
             ts: response.ts,
-            text: msg || ':0'
+            text: msg
           });
         }
       });
