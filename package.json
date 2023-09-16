@@ -27,7 +27,7 @@
     ]
   },
   "dependencies": {
-    "@slack/bolt": "^3.13.2",
+    "@slack/bolt": "^3.13.3",
     "@types/chalk": "^2.2.0",
     "@types/yargs": "^17.0.24",
     "axios": "^1.4.0",

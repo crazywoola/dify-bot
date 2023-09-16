@@ -14,10 +14,17 @@ export function checkEnvVariable(variableName: string): string {
 // TODO Error while parsing data: event: ping
 export function streamParser(data: string): any {
   try {
-    const json = data.split('data: ')[1];
-    return JSON.parse(json).answer;
+    const json = JSON.parse(data.split('data: ')[1]);
+    if (json.event === 'ping') {
+      return '';
+    }
+    if (json.event === 'message') {
+      return json.answer;
+    } else {
+      return '';
+    }
   } catch (e) {
-    error(`Error while parsing data: ${data}, error: ${e}`);
+    error(`${data}`);
     return '😄';
   }
 }

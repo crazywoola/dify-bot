@@ -34,19 +34,27 @@ class SlackBot extends Bot {
       text: `<@${user}>! Thinking...`
     });
 
-    if (response.channel && response.ts) {
-      this.send(inputs, query, user, async msg => {
-        console.log(msg);
-        if (msg !== null) {
+    try {
+      if (response.channel && response.ts) {
+        this.send(inputs, query, user, async (msg, err) => {
+          if (err) {
+            await client.chat.update({
+              channel: response.channel,
+              ts: response.ts,
+              text: msg
+            });
+            return;
+          }
           await client.chat.update({
             channel: response.channel,
             ts: response.ts,
             text: msg
           });
-        }
-      });
-    } else {
-      error('Error while sending message');
+        });
+      }
+    } catch (e) {
+      error('Error while sending message to slack');
+      error(`${e}`);
     }
   };
 

@@ -28,7 +28,7 @@ abstract class Bot {
     inputs: any,
     query: string,
     user: string,
-    callback: (msg: string) => void
+    callback: (msg: string, error: boolean) => void
   ) {
     let res: DifyStreamResponse;
     try {
@@ -42,14 +42,20 @@ abstract class Bot {
       stream.on('data', (chunk: Buffer) => {
         const word = streamParser(chunk.toString());
         result += word;
-        callback(result);
+        callback(result, false);
       });
+
+      stream.on('error', () => {
+        callback(result, false);
+      });
+
       stream.on('end', () => {
         console.log(chalk.green(`RESULT: ${result}`));
-        callback(result);
+        callback(result, false);
       });
     } catch {
-      error('Error while sending message');
+      error('Error while sending message to dify.ai');
+      callback('Error while sending message to dify.ai', true);
     }
   }
 }
