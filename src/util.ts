@@ -17,28 +17,31 @@ let buffer = ''; // assuming buffer is defined somewhere outside the function
 export function streamParser(data: string): any {
   buffer += data;
 
-  // Split buffered data by double newline, which is the separator for SSE events
   const messages = buffer.split('\n\n');
-  // Keep the last part in buffer for the next chunk
   buffer = messages.pop() || '';
+  const results: string[] = [];
 
   for (const message of messages) {
     if (message.startsWith('data: ')) {
       try {
-        const json = JSON.parse(message.slice(6).trim()); // slice off the "data: " prefix
+        const json = JSON.parse(message.slice(6).trim());
         if (json.event === 'ping') continue;
         if (json.event === 'message') {
-          console.log(json);
-          return json['answer'];
+          results.push(unicodeToChar(json['answer']));
         }
       } catch (e) {
         error(`Error parsing: ${message}`);
-        return '😄';
       }
     }
   }
 
-  return '';
+  return results;
+}
+
+function unicodeToChar(text: string) {
+  return text.replace(/\\u[\dA-Fa-f]{4}/g, function (match) {
+    return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
+  });
 }
 
 export function error(message: string) {
