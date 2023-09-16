@@ -31,7 +31,7 @@ class SlackBot extends Bot {
       ts: ts,
       text: text
     });
-  }, 300);
+  }, 100);
 
   handleAppMention = async ({ event, client }: { event: any; client: any }) => {
     const inputs = {};
