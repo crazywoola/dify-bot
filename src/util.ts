@@ -10,8 +10,6 @@ export function checkEnvVariable(variableName: string): string {
   return value;
 }
 // Function to parse string in streaming mode
-// 'data: {"event": "message", "task_id": "e22d1147-6fd9-4a01-8340-87c66a66aec2", "id": "8cf8f6f8-4ec2-42ca-bc1d-71c3ebc0a18e", "answer": " applications", "created_at": 1690977033, "conversation_id": "afa95cc9-d7b2-4f2b-aea8-fdd4ee299866"}'
-// TODO Error while parsing data: event: ping
 let buffer = ''; // assuming buffer is defined somewhere outside the function
 
 export function streamParser(data: string): any {
@@ -27,7 +25,10 @@ export function streamParser(data: string): any {
         const json = JSON.parse(message.slice(6).trim());
         if (json.event === 'ping') continue;
         if (json.event === 'message') {
-          results.push(unicodeToChar(json['answer']));
+          const parsedMessage = unicodeToChar(json['answer']);
+          if (parsedMessage.trim() !== ',') {
+            results.push(parsedMessage);
+          }
         }
       } catch (e) {
         error(`Error parsing: ${message}`);
