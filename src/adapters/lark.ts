@@ -33,24 +33,39 @@ class LarkBot extends Bot {
     this.server = http.createServer();
   }
 
-  eventDispatcher = new lark.EventDispatcher({
+  handleAppMention = new lark.EventDispatcher({
     encryptKey: process.env.LARK_ENCRYPT_KEY
   }).register({
     'im.message.receive_v1': async (data: any) => {
       console.log(data);
-      const chatId = data.message.chat_id;
-
-      const res = await this.app.im.message.create({
-        params: {
-          receive_id_type: 'chat_id'
-        },
-        data: {
-          receive_id: chatId,
-          content: JSON.stringify({ text: 'hello world' }),
-          msg_type: 'text'
-        }
-      });
-      return res;
+      if (data.sender.sender_type !== 'user') return;
+      try {
+        const chatId = data.message.chat_id;
+        const initialMessage = await this.app.im.message.create({
+          params: {
+            receive_id_type: 'chat_id'
+          },
+          data: {
+            receive_id: chatId,
+            content: JSON.stringify({ text: 'Thinking...' }),
+            msg_type: 'text'
+          }
+        });
+        info(`${initialMessage.data?.message_id}`);
+        await this.app.im.message.update({
+          path: {
+            message_id: initialMessage.data?.message_id || ''
+          },
+          data: {
+            msg_type: 'text',
+            content: JSON.stringify({ text: 'Yes 💡' })
+          }
+        });
+        return;
+      } catch (e) {
+        console.log(e);
+        return;
+      }
     }
   });
 
@@ -61,7 +76,7 @@ class LarkBot extends Bot {
   async hear(): Promise<void> {
     this.server.on(
       'request',
-      lark.adaptDefault('/webhook/event', this.eventDispatcher, {
+      lark.adaptDefault('/webhook/event', this.handleAppMention, {
         autoChallenge: true
       })
     );
