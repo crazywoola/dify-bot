@@ -27,13 +27,14 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },  
+  },
   "lint-staged": {
     "src/**/*.ts": [
       "prettier --write"
     ]
   },
   "dependencies": {
+    "@larksuiteoapi/node-sdk": "^1.20.0",
     "@slack/bolt": "^3.13.3",
     "@types/chalk": "^2.2.0",
     "@types/lodash": "^4.14.198",
