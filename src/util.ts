@@ -25,10 +25,16 @@ export function streamParser(data: string): any {
         const json = JSON.parse(message.slice(6).trim());
         if (json.event === 'ping') continue;
         if (json.event === 'message') {
-          const parsedMessage = unicodeToChar(json['answer']);
-          if (parsedMessage.trim() !== ',') {
-            results.push(parsedMessage);
+          const answer = json['answer'];
+          let parsedMessage = '';
+
+          if (Array.isArray(answer)) {
+            parsedMessage = answer.map(item => unicodeToChar(item)).join(' '); // adjust the join character as needed
+          } else {
+            parsedMessage = unicodeToChar(answer);
           }
+
+          results.push(parsedMessage);
         }
       } catch (e) {
         error(`Error parsing: ${message}`);
