@@ -1,6 +1,6 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 import Bot from './bot';
-import { info, error } from '../util';
+import { info } from '../util';
 import debounce from 'lodash/debounce';
 
 class DiscordBot extends Bot {

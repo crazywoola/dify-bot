@@ -1,7 +1,8 @@
 import * as lark from '@larksuiteoapi/node-sdk';
-import http from 'http';
+import http, { Server } from 'http';
 import Bot from './bot';
 import { info } from '../util';
+import debounce from 'lodash/debounce';
 
 interface RequestData {
   type: string;
@@ -17,7 +18,7 @@ interface MessageData {
 
 class LarkBot extends Bot {
   app: lark.Client;
-  server: http.Server;
+  server: Server;
 
   constructor() {
     super();
@@ -33,6 +34,18 @@ class LarkBot extends Bot {
     this.server = http.createServer();
   }
 
+  debouncedEditUpdate = debounce(async (message, text) => {
+    await this.app.im.message.update({
+      path: {
+        message_id: message.data?.message_id || ''
+      },
+      data: {
+        msg_type: 'text',
+        content: JSON.stringify({ text })
+      }
+    });
+  }, 200);
+
   handleAppMention = new lark.EventDispatcher({
     encryptKey: process.env.LARK_ENCRYPT_KEY
   }).register({
@@ -40,25 +53,36 @@ class LarkBot extends Bot {
       console.log(data);
       if (data.sender.sender_type !== 'user') return;
       try {
-        const chatId = data.message.chat_id;
+        const inputs = {};
+        const query = JSON.parse(data.message.content).text;
+        const user = data.sender.sender_id.user_id;
+
         const initialMessage = await this.app.im.message.create({
           params: {
             receive_id_type: 'chat_id'
           },
           data: {
-            receive_id: chatId,
+            receive_id: data.message.chat_id,
             content: JSON.stringify({ text: 'Thinking...' }),
             msg_type: 'text'
           }
         });
-        info(`${initialMessage.data?.message_id}`);
-        await this.app.im.message.update({
-          path: {
-            message_id: initialMessage.data?.message_id || ''
-          },
-          data: {
-            msg_type: 'text',
-            content: JSON.stringify({ text: 'Yes 💡' })
+
+        this.send(inputs, query, user, async (msg, err) => {
+          if (err) {
+            await this.app.im.message.update({
+              path: {
+                message_id: initialMessage.data?.message_id || ''
+              },
+              data: {
+                msg_type: 'text',
+                content: JSON.stringify({
+                  text: 'Error while sending message to dify.ai'
+                })
+              }
+            });
+          } else {
+            this.debouncedEditUpdate(initialMessage, msg || 'Unknown response');
           }
         });
         return;
