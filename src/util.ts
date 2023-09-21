@@ -76,3 +76,16 @@ export function userInputFormParser(items: any[]): FormItem[] {
   }
   return convertedData;
 }
+
+export const pickRequestData = (req: any) =>
+  new Promise(resolve => {
+    let chunks = '';
+    req.on('data', (chunk: any) => {
+      chunks += chunk;
+    });
+
+    req.on('end', () => {
+      const data = JSON.parse(chunks);
+      resolve(data);
+    });
+  });
