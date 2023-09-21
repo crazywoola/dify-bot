@@ -4,18 +4,6 @@ import Bot from './bot';
 import { info } from '../util';
 import debounce from 'lodash/debounce';
 
-interface RequestData {
-  type: string;
-  challenge?: string;
-}
-
-interface MessageData {
-  message: {
-    chat_id: string;
-    content: string;
-  };
-}
-
 class LarkBot extends Bot {
   app: lark.Client;
   server: Server;
