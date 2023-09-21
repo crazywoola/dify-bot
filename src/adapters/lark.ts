@@ -1,12 +1,11 @@
 import * as lark from '@larksuiteoapi/node-sdk';
-import http, { IncomingMessage, ServerResponse } from 'http';
+import http from 'http';
 import Bot from './bot';
-import { pickRequestData, error } from '../util';
+import { info } from '../util';
 
 interface RequestData {
   type: string;
   challenge?: string;
-  // ... other potential properties ...
 }
 
 interface MessageData {
@@ -31,35 +30,26 @@ class LarkBot extends Bot {
       appSecret,
       appType: lark.AppType.SelfBuild
     });
-
-    this.server = http.createServer(
-      async (req: IncomingMessage, res: ServerResponse) => {
-        const data: RequestData = (await pickRequestData(req)) as RequestData;
-        if (data.type === 'url_verification' && data.challenge) {
-          res.setHeader('Content-Type', 'application/json');
-          res.end(JSON.stringify({ challenge: data.challenge }));
-        }
-      }
-    );
+    this.server = http.createServer();
   }
 
-  eventDispatcher = new lark.EventDispatcher({}).register({
-    'im.message.receive_v1': async (data: MessageData) => {
-      const open_chat_id = data.message.chat_id;
-      const msgContent = JSON.parse(data.message.content);
-      const msg = msgContent.text;
+  eventDispatcher = new lark.EventDispatcher({
+    encryptKey: process.env.LARK_ENCRYPT_KEY
+  }).register({
+    'im.message.receive_v1': async (data: any) => {
+      console.log(data);
+      const chatId = data.message.chat_id;
 
       const res = await this.app.im.message.create({
         params: {
           receive_id_type: 'chat_id'
         },
         data: {
-          receive_id: open_chat_id,
-          content: JSON.stringify({ text: `hello ${msg}` }),
+          receive_id: chatId,
+          content: JSON.stringify({ text: 'hello world' }),
           msg_type: 'text'
         }
       });
-
       return res;
     }
   });
@@ -69,13 +59,17 @@ class LarkBot extends Bot {
   }
 
   async hear(): Promise<void> {
-    // Implement the logic if needed
+    this.server.on(
+      'request',
+      lark.adaptDefault('/webhook/event', this.eventDispatcher, {
+        autoChallenge: true
+      })
+    );
   }
 
   async up(): Promise<void> {
-    this.server
-      .on('request', lark.adaptDefault('/webhook/event', this.eventDispatcher))
-      .listen(3000);
+    info('⚡️ Lark app started');
+    this.server.listen(3000);
   }
 }
 
