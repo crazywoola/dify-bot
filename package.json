@@ -34,7 +34,7 @@
     ]
   },
   "dependencies": {
-    "@larksuiteoapi/node-sdk": "^1.20.0",
+    "@larksuiteoapi/node-sdk": "^1.7.0",
     "@slack/bolt": "^3.13.3",
     "@types/chalk": "^2.2.0",
     "@types/lodash": "^4.14.198",
