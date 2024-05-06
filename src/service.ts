@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, Method } from 'axios';
 
-export const BASE_URL = 'https://api.dify.ai/v1';
+export const BASE_URL = process.env.DIFY_API_BASE_URL;
 
 export enum RequestMode {
   STREAM = 'stream',
