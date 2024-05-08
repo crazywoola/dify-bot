@@ -1,3 +1,11 @@
+import {
+  CacheType,
+  ChatInputCommandInteraction,
+  Client,
+  ClientOptions,
+  Collection
+} from 'discord.js';
+
 export type TextInput = {
   label: string;
   variable: string;
@@ -26,3 +34,21 @@ export type FormItem = {
 export type DifyStreamResponse = {
   data: NodeJS.ReadableStream;
 };
+
+export interface Command {
+  data: {
+    name: string;
+    description: string;
+    options: FormItem[];
+  };
+  execute: (
+    interaction: ChatInputCommandInteraction<CacheType>
+  ) => Promise<void>;
+}
+export class DiscordCustomClient extends Client {
+  commands: Collection<string, any>;
+  constructor(options: ClientOptions) {
+    super(options);
+    this.commands = new Collection();
+  }
+}
