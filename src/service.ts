@@ -1,6 +1,10 @@
+import dotenv from 'dotenv';
 import axios, { AxiosResponse, Method } from 'axios';
+import { checkEnvVariable } from './util';
 
-export const BASE_URL = 'https://api.dify.ai/v1';
+dotenv.config();
+
+export const BASE_URL = checkEnvVariable('DIFY_API_BASE_URL');
 
 export enum RequestMode {
   STREAM = 'stream',

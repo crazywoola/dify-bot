@@ -18,6 +18,7 @@ DEBUG=debug
 MODE=chat # chat or completion
 ADAPTER=slack
 # Dify 
+DIFY_API_BASE_URL=https://api.dify.ai/v1
 DIFY_API_KEY=app-OxxxxxxxxxxxxxTxxxxxxx
 # Slack
 SLACK_BOT_TOKEN=xoxb-xxxxxxxxxxxxx-xxxxxxxxxxxxx-V25CBgH7347xxxxxxxxxxxxx
