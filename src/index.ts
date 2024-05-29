@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import SlackBot from './adapters/slack';
 import DiscordBot from './adapters/discord';
-import LarkBot from './adapters/lark';
 import DifyClient from './service';
 import { checkEnvVariable, error } from './util';
 dotenv.config();
@@ -22,10 +21,6 @@ const adapters: Record<string, any> = {
   discord: {
     requiredEnvVariables: ['DISCORD_TOKEN', 'DISCORD_ID'],
     createInstance: () => new DiscordBot()
-  },
-  lark: {
-    requiredEnvVariables: ['LARK_APP_ID', 'LARK_APP_SECRET'],
-    createInstance: () => new LarkBot()
   }
 };
 
