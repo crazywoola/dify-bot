@@ -1,11 +1,21 @@
 import chalk from 'chalk';
 import DifyClient from '../service';
 import { FormItem, DifyStreamResponse } from '../types';
-import { userInputFormParser, streamParser, error } from '../util';
+import {
+  userInputFormParser,
+  streamParser,
+  error,
+  checkEnvVariable
+} from '../util';
 
 abstract class Bot {
   difyClient?: DifyClient;
   application?: FormItem[];
+  debugMode = false;
+
+  constructor() {
+    this.debugMode = checkEnvVariable('DEBUG') === 'debug';
+  }
 
   abstract say(message: string): Promise<void>;
   abstract hear(): void;
@@ -47,7 +57,10 @@ abstract class Bot {
       stream.setEncoding('utf8');
 
       stream.on('data', (chunk: string) => {
-        const word = streamParser(chunk);
+        let word = streamParser(chunk);
+        if (Array.isArray(word)) {
+          word = word.join('');
+        }
         result += word;
         callback(result, false);
       });
@@ -59,6 +72,12 @@ abstract class Bot {
     } catch (e) {
       error(`Error while sending message to dify.ai ${e}`);
       callback('', true);
+    }
+  }
+
+  debugLog(message: string | Object) {
+    if (this.debugMode) {
+      console.log(message);
     }
   }
 }
