@@ -40,7 +40,7 @@ TODO
 You will need node.js 20.0.0 or newer.
 
 ```bash
-cp /env.example .env
+cp .env.example .env
 npm install
 ```
 

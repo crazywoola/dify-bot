@@ -24,7 +24,7 @@ export function streamParser(data: string): any {
       try {
         const json = JSON.parse(message.slice(6).trim());
         if (json.event === 'ping') continue;
-        if (json.event === 'message') {
+        if (json.event === 'message' || json.event === 'agent_message') {
           const answer = json['answer'];
           let parsedMessage = '';
 
