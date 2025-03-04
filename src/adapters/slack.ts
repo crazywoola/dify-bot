@@ -27,9 +27,10 @@ class SlackBot extends Bot {
 
   debouncedChatUpdate = debounce(async (client, channel, ts, text) => {
     await client.chat.update({
+      mrkdwn: true,
       channel: channel,
       ts: ts,
-      text: text
+      markdown_text: text
     });
   }, 100);
 
