@@ -26,12 +26,20 @@ class SlackBot extends Bot {
   };
 
   debouncedChatUpdate = debounce(async (client, channel, ts, text) => {
-    await client.chat.update({
-      mrkdwn: true,
-      channel: channel,
-      ts: ts,
-      markdown_text: text
-    });
+    const params = { channel, ts };
+    const isSlackFormatMrkdwn = process.env.SLACK_FORMAT === 'mrkdwn'
+
+    if (isSlackFormatMrkdwn) {
+      Object.assign(params, {
+        mrkdwn: true,
+        markdown_text: text
+      });
+    } else {
+      Object.assign(params, {
+        text: text
+      });
+    }
+    await client.chat.update(params);
   }, 100);
 
   handleAppMention = async ({ event, client }: { event: any; client: any }) => {
